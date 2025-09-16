@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - E-Commerce Store{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-gray-800 mb-8">Checkout</h1>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Order Form -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-6">Shipping Information</h2>
+
+        <form method="post" id="checkout-form">
+            {% csrf_token %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="{{ form.first_name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                        First Name *
+                    </label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                        <p class="text-red-600 text-sm mt-1">{{ form.first_name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.last_name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                        Last Name *
+                    </label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                        <p class="text-red-600 text-sm mt-1">{{ form.last_name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                    Email Address *
+                </label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.email.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="mt-4">
+                <label for="{{ form.address.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                    Address *
+                </label>
+                {{ form.address }}
+                {% if form.address.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.address.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div>
+                    <label for="{{ form.postal_code.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                        Postal Code *
+                    </label>
+                    {{ form.postal_code }}
+                    {% if form.postal_code.errors %}
+                        <p class="text-red-600 text-sm mt-1">{{ form.postal_code.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.city.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                        City *
+                    </label>
+                    {{ form.city }}
+                    {% if form.city.errors %}
+                        <p class="text-red-600 text-sm mt-1">{{ form.city.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <label for="{{ form.country.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                    Country *
+                </label>
+                {{ form.country }}
+                {% if form.country.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.country.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="mt-8">
+                <button type="submit"
+                        class="w-full bg-primary text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold">
+                    Place Order
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-6">Order Summary</h2>
+
+        {% for item in cart.items.all %}
+            <div class="flex items-center border-b border-gray-200 py-3 {% if forloop.last %}border-b-0{% endif %}">
+                <div class="w-16 h-16 flex-shrink-0">
+                    {% if item.product.image %}
+                        <img src="{{ item.product.image }}" alt="{{ item.product.name }}"
+                             class="w-full h-full object-cover rounded">
+                    {% else %}
+                        <div class="w-full h-full bg-gray-200 rounded flex items-center justify-center">
+                            <span class="text-gray-500 text-xs">No image</span>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="flex-grow ml-3">
+                    <h4 class="font-medium">{{ item.product.name }}</h4>
+                    <p class="text-sm text-gray-600">Qty: {{ item.quantity }}</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-semibold">${{ item.get_total_price }}</p>
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="mt-6 space-y-3">
+            <div class="flex justify-between">
+                <span>Subtotal:</span>
+                <span class="font-semibold">${{ cart.total_price }}</span>
+            </div>
+            <div class="flex justify-between">
+                <span>Shipping:</span>
+                <span>Free</span>
+            </div>
+            <div class="flex justify-between">
+                <span>Tax:</span>
+                <span>$0.00</span>
+            </div>
+            <div class="border-t pt-3">
+                <div class="flex justify-between text-lg font-bold">
+                    <span>Total:</span>
+                    <span class="text-primary">${{ cart.total_price }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+            <h3 class="font-semibold mb-2">Payment Information</h3>
+            <p class="text-sm text-gray-600">
+                This is a demo checkout. No actual payment will be processed.
+                Click "Place Order" to complete your test order.
+            </p>
+        </div>
+
+        <div class="mt-6">
+            <a href="{% url 'shop:cart_detail' %}"
+               class="w-full bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 text-center block">
+                ← Back to Cart
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
