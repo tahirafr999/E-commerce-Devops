@@ -36,4 +36,4 @@ USER appuser
 EXPOSE 8000
 
 # Start server
-CMD ["sh", "-c", "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn ecommerce.wsgi:application --bind 0.0.0.0:8000"]
+CMD ["sh", "-c", "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py create_admin && gunicorn ecommerce.wsgi:application --bind 0.0.0.0:8000"]
