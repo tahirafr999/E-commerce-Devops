@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
 from .models import Category, Product, Cart, CartItem, Order, OrderItem
 from .forms import CartAddProductForm, OrderCreateForm
@@ -159,3 +159,9 @@ def register(request):
         'form': form,
     }
     return render(request, 'registration/register.html', context)
+
+
+def logout_view(request):
+    logout(request)
+    messages.success(request, 'You have been logged out successfully!')
+    return redirect('shop:home')
