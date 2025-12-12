@@ -10,8 +10,6 @@ services:
         value: False
       - key: RENDER
         value: True
-      - key: DATABASE_URL
-        value: postgresql://neondb_owner:npg_heU84ctdoNSq@ep-twilight-dream-ad1kc99m-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require
     disk:
       name: static-files
       mountPath: /app/staticfiles
