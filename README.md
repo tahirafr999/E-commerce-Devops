@@ -26,3 +26,12 @@ A proof-of-concept e-commerce application built with Django 5, PostgreSQL (Neon)
 - pip (Python package installer)
 - Neon PostgreSQL database
 
+## Deployment
+
+When deploying to Render, ensure you set the following Environment Variables in the Render Dashboard:
+
+1. `DATABASE_URL`: `postgres://user:password@hostname/dbname?sslmode=require` (From Neon Console)
+2. `SECRET_KEY`: A secure random string
+3. `DEBUG`: `False` (for production)
+
+
